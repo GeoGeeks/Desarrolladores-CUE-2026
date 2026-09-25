@@ -5,7 +5,7 @@ Este repositorio contiene el código fuente y los archivos de configuración par
 ## Archivos del repositorio
 
 *   **`LISA_Bivariado_Tool.R`**: el script principal de R que actúa como motor de la herramienta. Se encarga de recibir los datos desde ArcGIS, calcular la topología espacial, ejecutar el estadígrafo BiLISA y devolver los resultados.
-*   **`Simbologia_LISA.lyrx`**: archivo de capa de ArcGIS Pro que contiene la simbología estándar (colores de clústeres Alto-Alto, Bajo-Bajo, etc.). Se aplica automáticamente al resultado para una visualización inmediata.
+*   **`Simbologia_BiLISA.lyrx`**: archivo de capa de ArcGIS Pro que contiene la simbología estándar (colores de clústeres Alto-Alto, Bajo-Bajo, etc.). Se aplica automáticamente al resultado para una visualización inmediata.
 
 ## Requisitos previos
 
@@ -49,5 +49,5 @@ Para que el mapa resultante se dibuje automáticamente con los colores correctos
 1. En la misma ventana de propiedades de la herramienta, ve a la pestaña **Parameters**.
 2. Haz clic sobre el parámetro número 6 (**Output Feature Class**).
 3. En la parte inferior, busca la propiedad llamada **Symbology** (Simbología).
-4. Haz clic en el ícono de la carpeta y selecciona el archivo **`Simbologia_LISA.lyrx`** incluido en este repositorio.
+4. Haz clic en el ícono de la carpeta y selecciona el archivo **`Simbologia_BiLISA.lyrx`** incluido en este repositorio.
 5. Haz clic en **OK** para guardar la herramienta.
