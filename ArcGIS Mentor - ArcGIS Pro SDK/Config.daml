@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Add-in manifest.
+
+  Written by hand: the DAML editor ships with the Pro SDK's Visual Studio templates, which
+  are not used in this build. It is still validated against the schema Pro itself ships at
+  bin\ArcGIS.Desktop.Framework.xsd, and the layout follows the same pattern as the .daml files
+  Esri includes under bin\Extensions.
+
+  autoLoad="true": without it, the module only initializes once someone interacts with one of
+  its UI elements, which would make it impossible to tell whether the add-in failed to load or
+  simply was not used yet.
+-->
+<ArcGIS defaultAssembly="ArcGISMentorAddIn.dll"
+        defaultNamespace="ArcGISMentorAddIn"
+        xmlns="http://schemas.esri.com/DADF/Registry"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AddInInfo id="{3c502c10-0456-4cd7-9008-b0e04fb977ba}" version="0.1" desktopVersion="3.7">
+    <Name>ArcGIS Mentor</Name>
+    <Description>Assistant extension that answers questions about an organization's own geoprocessing tools, catalogued from its .pyt and .atbx toolboxes.</Description>
+    <Author>KolisCode</Author>
+    <Company>KolisCode</Company>
+    <Subject>Framework</Subject>
+  </AddInInfo>
+
+  <modules>
+    <insertModule id="ArcGISMentor_Module"
+                  className="Module1"
+                  autoLoad="true"
+                  caption="ArcGISMentor">
+    </insertModule>
+  </modules>
+
+  <!--
+    Registration with the assistant. The layout follows ADGeoProcessing.daml, which is how
+    Esri registers its own equivalent extension in the same version of Pro.
+
+    extensionCategoryRefID reuses Esri's own taxonomy (ai_geoprocessing_category, from
+    ADCore.daml): what this extension searches for is geoprocessing, and defining a separate
+    category just for it would hide it from where people already look.
+
+    The searchDescription elements are prompt text, not documentation: they are what the
+    model reads to decide whether to call this extension. That is why they explicitly say
+    "of the organization" and "own" — without that distinction there is no way to tell this
+    apart from the functions that already search Esri's own system tools.
+
+    There is no <overrides> element here. That mechanism can suppress the assistant's native
+    functions, and this extension does not use it: it adds a capability, it does not hide one
+    that already exists.
+  -->
+  <categories>
+    <updateCategory refID="esri_core_ai_assistant_extension_category">
+      <insertComponent id="arcgismentor_assistant_extension"
+                       className="AsistenteMentor">
+        <content extensionCategoryRefID="ai_geoprocessing_category">
+          <uiText>
+            <title>Herramientas propias de la organización</title>
+            <shortDescription>Busca en el catálogo de toolboxes propias, con su cobertura y con si son de fiar para encadenar.</shortDescription>
+          </uiText>
+          <searchDescriptions>
+            <searchDescription>Buscar una herramienta de geoprocesamiento propia de esta organización.</searchDescription>
+            <searchDescription>Qué herramienta interna o del equipo sirve para lo que quiero hacer.</searchDescription>
+          </searchDescriptions>
+          <aiAssistantFunction name="BuscarHerramientaDeLaOrganizacion">
+            <searchDescriptions>
+              <searchDescription>Buscar en el inventario propio de la organización por lo que la herramienta hace.</searchDescription>
+              <searchDescription>Saber si una herramienta propia es de fiar para encadenar y cuánto de su contrato se entendió.</searchDescription>
+            </searchDescriptions>
+          </aiAssistantFunction>
+          <!--
+            The model composes the chain; the catalog decides whether it holds. The search
+            descriptions are phrased as the question a person would actually ask, not as a
+            description of the function itself.
+          -->
+          <aiAssistantFunction name="VerificarCadenaDeHerramientas">
+            <searchDescriptions>
+              <searchDescription>Comprobar si dos o más herramientas propias se pueden encadenar entre sí.</searchDescription>
+              <searchDescription>Si la salida de una herramienta de la organización sirve como entrada de otra.</searchDescription>
+              <searchDescription>Verificar una secuencia de geoprocesos antes de proponerla o ejecutarla.</searchDescription>
+            </searchDescriptions>
+          </aiAssistantFunction>
+          <!--
+            Diagnoses only; it does not write anything. Producing the corrected copy is a
+            separate, explicit action taken in ArcGISMentor.pyt's own form, with the output
+            location visible before anything is written.
+          -->
+          <aiAssistantFunction name="DiagnosticarHerramientaDeLaOrganizacion">
+            <searchDescriptions>
+              <searchDescription>Qué está mal en el contrato de una toolbox .pyt propia y qué se puede arreglar.</searchDescription>
+              <searchDescription>Revisar los parámetros de una herramienta de la organización en busca de defectos.</searchDescription>
+            </searchDescriptions>
+          </aiAssistantFunction>
+          <!--
+            The full inventory, not just what matches one stated intent — for composing a
+            multi-step plan without inventing steps that were never actually looked up. It
+            does not replace VerificarCadenaDeHerramientas: seeing every tool listed does not
+            establish that any two of them fit together.
+          -->
+          <aiAssistantFunction name="ListarHerramientasDeLaOrganizacion">
+            <searchDescriptions>
+              <searchDescription>Ver todo el inventario de herramientas propias de la organización.</searchDescription>
+              <searchDescription>Armar un plan de trabajo o una cadena completa de varios pasos con herramientas propias.</searchDescription>
+              <searchDescription>Qué herramientas propias hay disponibles, de principio a fin de un caso.</searchDescription>
+            </searchDescriptions>
+          </aiAssistantFunction>
+          <!--
+            Opens the real Geoprocessing pane with the form ready, without executing it. Same
+            boundary as the diagnostic function above: the tool prepares, the person presses
+            Run.
+          -->
+          <aiAssistantFunction name="AbrirHerramientaDeLaOrganizacion">
+            <searchDescriptions>
+              <searchDescription>Abrir o cargar una herramienta propia de la organización para correrla.</searchDescription>
+              <searchDescription>Tener lista para ejecutar una herramienta interna, con su formulario a la vista.</searchDescription>
+            </searchDescriptions>
+          </aiAssistantFunction>
+        </content>
+      </insertComponent>
+    </updateCategory>
+  </categories>
+</ArcGIS>

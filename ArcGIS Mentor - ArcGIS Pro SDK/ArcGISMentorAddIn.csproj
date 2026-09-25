@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    ArcGIS Pro assistant add-in, built without Visual Studio.
+
+    Esri's ProGuide assumes Visual Studio, which is where the Pro SDK project templates come
+    from. Without it, this project builds with a plain "dotnet build", referencing the
+    assemblies directly from an existing Pro installation.
+
+    net10.0-windows is not a choice made here — it matches the target framework moniker Pro
+    itself reports in ArcGISPro.runtimeconfig.json ("tfm": "net10.0", with
+    Microsoft.WindowsDesktop.App 10.0.0).
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>ArcGISMentorAddIn</AssemblyName>
+    <RootNamespace>ArcGISMentorAddIn</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Version>0.1.0</Version>
+    <!-- The .esriAddInX package is assembled separately (see empaquetar.py): packaging
+         normally comes from the Pro SDK's Visual Studio templates, which are not used here. -->
+    <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+  </PropertyGroup>
+
+  <!--
+    Location of the Pro installation. Can be overridden with -p:ArcGISProBin=... for a
+    non-standard install path; the default below is the standard location, not specific to
+    any one machine.
+  -->
+  <PropertyGroup Condition="'$(ArcGISProBin)' == ''">
+    <ArcGISProBin>$(ProgramW6432)\ArcGIS\Pro\bin</ArcGISProBin>
+  </PropertyGroup>
+
+  <!--
+    Private=false: Pro's own assemblies are not copied into the package. Pro provides them at
+    runtime, and bundling them is the usual way to end up with two different versions of the
+    same type loaded at once.
+  -->
+  <ItemGroup>
+    <Reference Include="ArcGIS.Desktop.Framework">
+      <HintPath>$(ArcGISProBin)\ArcGIS.Desktop.Framework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ArcGIS.Core">
+      <HintPath>$(ArcGISProBin)\ArcGIS.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!--
+      The assistant API lives in ArcGIS.Desktop.Core.dll, under bin\Extensions\Core\ rather
+      than bin\ directly. Its namespace, ArcGIS.Desktop.Internal.Core.Assistant, is public but
+      marked Internal — Esri's way of signaling the API is not yet stable across versions,
+      which in practice means recompiling against each new Pro release.
+    -->
+    <Reference Include="ArcGIS.Desktop.Core">
+      <HintPath>$(ArcGISProBin)\Extensions\Core\ArcGIS.Desktop.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
