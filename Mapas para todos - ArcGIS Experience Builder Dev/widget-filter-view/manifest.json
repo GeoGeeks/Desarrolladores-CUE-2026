@@ -1,0 +1,14 @@
+{
+  "name": "widget-filter-view",
+  "type": "widget",
+  "version": "1.0.0",
+  "exbVersion": "1.17.0",
+  "author": "Sergio",
+  "description": "Widget que aplica modificaciones en las paletas de color sobre un mapa existente para usuarios con condición de daltonismo ",
+  "copyright": "",
+  "license": "",
+  "properties": {},
+  "dependency": ["jimu-arcgis"],
+  "translatedLocales": ["es"],
+  "defaultSize": { "width": 400, "height": 350 }
+}
