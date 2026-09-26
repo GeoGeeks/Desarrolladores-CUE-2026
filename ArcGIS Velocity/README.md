@@ -10,13 +10,12 @@ Sistema embebido de telemetría IoT orientado a la medición, procesamiento y tr
 ---
 
 ## Tabla de Contenidos
-- [Esquema de Hardware y Pinout](#-esquema-de-hardware-y-pinout)
-- [Modelo de Conversión (Regresión Cúbica)](#-modelo-de-conversión-regresión-cúbica)
-- [Estructura del Payload JSON](#-estructura-del-payload-json)
-- [Guía de Replicación e Instalación](#-guía-de-replicación-e-instalación)
-- [Configuración del Feed en ArcGIS Velocity](#-configuración-del-feed-en-arcgis-velocity)
-
----
+- [Esquema de Hardware y Pinout](#esquema-de-hardware-y-pinout)
+- [Modelo de Conversión (Regresión Cúbica)](#modelo-de-conversión-regresión-cúbica)
+- [Requisitos de Software y Librerías](#requisitos-de-software-y-librerías)
+- [Estructura del Payload JSON](#estructura-del-payload-json)
+- [Guía de Replicación e Instalación](#guía-de-replicación-e-instalación)
+- [Configuración del Feed en ArcGIS Velocity](#configuración-del-feed-en-arcgis-velocity)
 
 ---
 
@@ -46,7 +45,7 @@ La conversión de la lectura cruda del sensor TSL2591 a unidades de irradiancia 
 
 $$\text{Irradiancia } (v) = 5.553 \times 10^{-12} \cdot x^3 - 3.618 \times 10^{-7} \cdot x^2 + 2.263 \times 10^{-2} \cdot x - 29.53$$
 
-*Donde $x$ corresponde al conteo de luminosidad total (Espectro Visible + Infrarrojo).*
+*Donde x corresponde al conteo de radiación total (Espectro Visible + Infrarrojo).*
 
 ---
 
@@ -66,8 +65,7 @@ Para la compilación del firmware en **Arduino IDE**, se requiere el paquete de 
 
 El mensaje emitido periódicamente por el ESP32 hacia el endpoint de ArcGIS Velocity cumple con el esquema estandarizado:
 
-JSON: 
-
+```json
 {
   "device_id": "ESP32_01",
   "irradiancia": 542.1850,
@@ -76,6 +74,7 @@ JSON:
   "altitud": 2600.50,
   "timestamp": 1727345297
 }
+```
 
 ## Guía de Replicación e Instalación
 
@@ -83,12 +82,15 @@ JSON:
 - Instale la extensión de tarjetas ESP32 en Arduino IDE.
 - Instale las librerías ArduinoJSON y Adafruit TSL2591.
 
+```markdown
 2. Parámetros del Firmware:
 Abra el archivo *Velocity_ESP32.ino* y configure las siguientes variables:
+```cpp
 - const char* ssid             = "SU_SSID_WIFI";
 - const char* password         = "SU_PASSWORD_WIFI";
 - const char* ApiKey           = "SU_API_KEY";
 - const char* velocityEndpoint = "SU_VELOCITY_ENDPOINT_URL";
+```
 
 3. Carga al microcontrolador:
 - Conecte el ESP32 mediante el cable USB
