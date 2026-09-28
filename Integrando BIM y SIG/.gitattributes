@@ -1,0 +1,5 @@
+Unity/Packages/com.esri.arcgis-maps-sdk/Binaries/**/*.dll filter=lfs diff=lfs merge=lfs -text
+Unity/Packages/com.esri.arcgis-maps-sdk/Binaries/**/*.so filter=lfs diff=lfs merge=lfs -text
+Unity/Packages/com.esri.arcgis-maps-sdk/Binaries/**/*.dylib filter=lfs diff=lfs merge=lfs -text
+Unity/Packages/com.esri.arcgis-maps-sdk/Binaries/iOS/**/*.framework/Runtimecore filter=lfs diff=lfs merge=lfs -text
+Unity/Packages/com.esri.arcgis-maps-sdk/Binaries/xrOS/**/*.framework/Runtimecore filter=lfs diff=lfs merge=lfs -text
